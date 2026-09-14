@@ -36,7 +36,15 @@ public class EvalVisitor extends ExprBaseVisitor<Integer> {
     public Integer visitMulDiv(ExprParser.MulDivContext ctx) {
         int left = visit(ctx.expr(0));
         int right = visit(ctx.expr(1));
-        if ("*".equals(ctx.MUL().getText())) return left * right;
+
+        if (ctx.MUL() != null) {
+            return left * right;
+        }
+
+        if (right == 0) {
+            throw new ArithmeticException("Division par zéro");
+        }
+
         return left / right;
     }
 
@@ -44,7 +52,11 @@ public class EvalVisitor extends ExprBaseVisitor<Integer> {
     public Integer visitAddSub(ExprParser.AddSubContext ctx) {
         int left = visit(ctx.expr(0));
         int right = visit(ctx.expr(1));
-        if ("+".equals(ctx.ADD().getText())) return left + right;
+
+        if (ctx.ADD() != null) {
+            return left + right;
+        }
+
         return left - right;
     }
 
